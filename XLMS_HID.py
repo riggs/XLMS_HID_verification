@@ -1,5 +1,9 @@
+from construct import (
+    Construct, GreedyRange, Struct, Byte, BitStruct, Padding, Flag, PascalString, Array, BitField,
+    Enum,
+)
 
-from construct import *
+__author__ = "riggs"
 
 
 class Print_Context(Construct):
