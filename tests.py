@@ -8,7 +8,7 @@ __exports__ = ("passed",)
 
 
 admin = Report(ID=1, types=Report.Types(get_feature=True), name=u'admin',
-               serialization=[Report.Serialization(type='Int', length=1) for _ in range(4)] + \
+               serialization=[Report.Serialization(type='Int', length=1) for _ in range(4)] +
                              [Report.Serialization(type='utf_8', length=5)])
 admin_hex = "0x0E 0x01 0x04 0x05 0x61 0x64 0x6D 0x69 0x6E 0x05 0x05 0x05 0x05 0x14"
 
