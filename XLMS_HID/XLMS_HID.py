@@ -23,10 +23,23 @@ class Report(object):
             self.output = output
             self.input = input
 
+        def __str__(self):
+            return ", ".join([name for (name, value) in
+                     [('Set Feature', self.set_feature), ('Get Feature', self.get_feature),
+                      ('Output', self.output), ('Input', self.input)] if value])
+
     class Serialization(object):
         def __init__(self, type, length):
+            assert type in ("utf_8", "Uint", "Int", "Float")
             self.type = type
-            self.length = length
+            if type == "utf_8":
+                self.length = length
+            else:
+                assert length % 8 == 0
+                self.length = length / 8
+
+        def __repr__(self):
+            return ''.join([self.type, '*'+str(self.length) if self.type is "utf_8" else str(self.length * 8)])
 
     def __init__(self, ID, types, name, serialization, length=None):
         self.ID = ID
@@ -34,6 +47,9 @@ class Report(object):
         self.name = name
         self.serialization = serialization
         self.length = length if length else 4 + len(name) + len(serialization)
+
+    def __str__(self):
+        return "Report<ID: {ID}, {types}, '{name}', {serialization}>".format(**self.__dict__)
 
 
 data_structure = GreedyRange(
@@ -54,8 +70,8 @@ data_structure = GreedyRange(
                         BitField("length", 6),
                         Enum(BitField("type", 2),
                              utf_8=0,
-                             Int=1,
-                             Uint=2,
+                             Uint=1,
+                             Int=2,
                              Float=3,
                              )
                         )
@@ -77,3 +93,7 @@ def deserialize(_bytes):
         _bytes = hexstring_to_bytearray(_bytes)
 
     return data_structure.parse(_bytes)
+
+
+def magic_numbers(*reports):
+    return ', '.join(hex_parser(serialize(reports)).split())
