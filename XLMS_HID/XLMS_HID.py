@@ -68,7 +68,7 @@ class Report(object):
                         results.extend([cls(type, int(size))] * int(count))
             return results
 
-    def __init__(self, ID, types, name, serialization=Serialization('utf8', 0)):
+    def __init__(self, ID, types, name, serialization=(Serialization('utf8', 0),)):
         self.ID = ID
         if isinstance(types, dict):
             self.types = self.Types(**types)
